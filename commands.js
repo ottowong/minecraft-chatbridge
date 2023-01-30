@@ -1,25 +1,10 @@
 var seedrandom = require('seedrandom');
 
-// Math.floor(myrng() * (max - min + 1) + min )
+// hardcode some accounts that try to break the bot lol
+// probably should use the .env for this
+const blacklist = []
 
-const blacklist = ["yanokotan", "0pointerexc", "geza3d"]
-
-const fortunes = [
-    "Everyone agrees you are the best", 
-    "Stop searching forever. Happiness is just next to you. Reach for the cop's gun", 
-    "The difference between a flower and a weed is judgement:this will make ugly people feel better", 
-    "Bad luck and ill misfortune will infest your little soul for all eternity", 
-    "Look right... now look left... now look forward (do this really fast) do you feel any different? Good you should feel dizzy. This is the way of the Chinese Masta", 
-    "The cooler you think you are the dumber you look", 
-    "A focused mind is one of the most powerful forces in the universe. Unless it's your mind... better off leaving this one to the professionals", 
-    "The man or woman you desire feels the same way about you. But does she/he feel the same way about the woman or man inside of you? 50/50 chance, take it anyway.", 
-    "Your greatest dream is nothing true. Sorry typo, mean to say greatest dream is coming true. God looks after you especially, you are special to him, more than anyone else. Eat more rice.", 
-    "A very attractive and wealthy person has a message for you: ...We're sorry, we can't find the rest of the original message! But it was important.", 
-    "You are admired by everyone for your talent and ability. Don't show this message to anyone else, they'll get jealous", 
-    "All your sorrows will vanish please note we make no guarantee as to how, exactly"
-]
-
-const oldfortunes = ["Reply hazy, try again","Excellent Luck","Good Luck","Average Luck","Bad Luck","Good news will come to you by mail","You will meet a dark handsome stranger","Better not tell you now","Outlook good","Very Bad Luck","Godly Luck"]
+const fortunes = ["Reply hazy, try again","Excellent Luck","Good Luck","Average Luck","Bad Luck","Good news will come to you by mail","You will meet a dark handsome stranger","Better not tell you now","Outlook good","Very Bad Luck","Godly Luck"]
 
 const excludeArrFromArr = (arr, exclude) => {
     const newArr = [];
@@ -135,8 +120,8 @@ module.exports.command = (bot) => {
     }
 	
 	bot.commands['fortune'] = async function (args) {
-        const i = Math.floor(Math.random() * oldfortunes.length)
-        bot.chat('>' + oldfortunes[i]);
+        const i = Math.floor(Math.random() * fortunes.length)
+        bot.chat('>' + fortunes[i]);
     }
 
     bot.commands['flip'] = async function (args, m, username) {
@@ -152,34 +137,9 @@ module.exports.command = (bot) => {
         bot.chat(">" + username + " flipped a coin: " +  coin)
     }
 
-    // bot.commands["test"] = async function(args) {
-    //     bot.chat(args[0])
-    // }
-    
-
-    // TO DO: load a file with a bunch of passwords and pick from there
-    // const passwords = ["!QAZ@WSX#EDC", "Hunter1", "Password123"]
-    
-	// bot.commands["password"] = async function(args, m, username) {
-    //     if(args[1]){
-    //         if(args[1].toLowerCase() === "sadlads"){ // hardcoding the bot's name in here smh
-    //             bot.chat(">Nice try, faggot")
-    //         } else{
-    //             var myrng = seedrandom(username.toLowerCase());
-    //             bot.chat(myrng())
-    //         }
-    //     }
-    //     if(args[1]){ // another player was specified
-
-        
-	// 	} else { // run for themself
-	// 		bot.chat("gg")
-    //     }
-    // }
-
     bot.commands["height"] = async function(args, m, username) {
         if(args[1]){
-            if(args[1].toLowerCase() === "sadlads"){ // hardcoding the bot's name in here smh
+            if(args[1].toLowerCase() === "sadlads"){ // hardcoding the bot's name in here smh -- todo: make this automatic
                 bot.chat(">"+args[1]+" is 7'")
             } else{
                 var myrng = (seedrandom(args[1].toLowerCase()));
@@ -210,7 +170,7 @@ module.exports.command = (bot) => {
     bot.commands["gaydar"] = async function(args, m, username) {
         var choice = ["gay", "straight"]
 	try{
-		if(args[1].length < 3 ){
+		if(args[1].length < 3 ){ // for args less than 3 characters long. - mainly for people using launchers that append stuff to the end of their messages
 			bot.chat("Invalid argument. You are probably gay.")
 			return
 		}
@@ -218,7 +178,7 @@ module.exports.command = (bot) => {
 
 	}
         if(args[1]){
-            if(args[1].toLowerCase() === "sadlads"){ // hardcoding the bot's name in here smh
+            if(args[1].toLowerCase() === "sadlads"){ // hardcoding the bot's name in here smh -- todo: do this better
                 bot.chat(">I, "+args[1]+" am straight! Don't you forget it.")
             } else{
                 var myrng = (seedrandom(args[1].toLowerCase()));
@@ -235,7 +195,7 @@ module.exports.command = (bot) => {
 
     bot.commands["discord"] = async function(args, m, username) {
 	if (m == "!discord" && !(blacklist.includes(username.toLowerCase())) ){
-	        bot.chat(">JOIN THE SADLADS DISCORD: http://discord.sadlads.com")
+	        bot.chat(">JOIN THE SADLADS DISCORD: http://discord.sadlads.com") // todo: put this message in the .env
 	}
     }
 
