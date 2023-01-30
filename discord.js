@@ -29,6 +29,9 @@ module.exports.plugin = (bot) => {
 			.setAuthor(username)
                         .setDescription(message+" ")
 	}
+	if (username.toLowerCase() == bot.username.toLowerCase()){
+		chatEmbed.setColor(0x00FF00)
+	}
 	channel.send({ embed: chatEmbed });
 	
         //channel.send("**<"+username+">** "+message)
@@ -78,8 +81,8 @@ module.exports.plugin = (bot) => {
                 	.setColor(0xFF0000)
                        	.setDescription(reason)
 		channel.send({ embed: kickedEmbed });
-
 	});
+
     // when a message is sent to discord
     client.on("message", msg => {
         // ignore message not in the correct channel

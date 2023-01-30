@@ -139,7 +139,7 @@ module.exports.command = (bot) => {
 
     bot.commands["height"] = async function(args, m, username) {
         if(args[1]){
-            if(args[1].toLowerCase() === "sadlads"){ // hardcoding the bot's name in here smh -- todo: make this automatic
+            if(args[1].toLowerCase() === bot.username.toLowerCase()){ 
                 bot.chat(">"+args[1]+" is 7'")
             } else{
                 var myrng = (seedrandom(args[1].toLowerCase()));
@@ -178,7 +178,7 @@ module.exports.command = (bot) => {
 
 	}
         if(args[1]){
-            if(args[1].toLowerCase() === "sadlads"){ // hardcoding the bot's name in here smh -- todo: do this better
+            if(args[1].toLowerCase() === bot.username.toLowerCase()){
                 bot.chat(">I, "+args[1]+" am straight! Don't you forget it.")
             } else{
                 var myrng = (seedrandom(args[1].toLowerCase()));
