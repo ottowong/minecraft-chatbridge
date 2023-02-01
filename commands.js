@@ -1,5 +1,6 @@
 var seedrandom = require('seedrandom');
 
+
 // hardcode some accounts that try to break the bot lol
 // probably should use the .env for this
 const blacklist = []

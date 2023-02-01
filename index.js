@@ -3,6 +3,8 @@ const { utils } = require('aes-js')
 const mineflayer = require('mineflayer')
 //const mineflayerViewer = require("prismarine-viewer").mineflayer
 
+let lastCommand = new Date();
+
 console.log("Trying to Join "+process.env.host+":"+process.env.port)
 var options = {
   host: process.env.host, // optional
@@ -32,6 +34,12 @@ discordPlugin["plugin"](bot)
 
 //console.log(bot.commands)
 
+function dadBot(message, leng)
+{
+	message = message.toString()
+	message = message.slice(0,150 - (11 + bot.username.length))
+      	return(">Hi, " + message.slice(leng) + ", I'm " + bot.username)
+}
 
 function formatDate()
 {
@@ -42,6 +50,7 @@ function formatDate()
 	return(dateTime);
 }
 
+
 function bindEvents(bot){
 
   bot.on('chat', function (username, message) {
@@ -51,6 +60,22 @@ function bindEvents(bot){
     if(username === "whispers") return
     // console.log(message.toString())
     // check if the message starts with the prefix
+
+    try{
+      if((message.startsWith(process.env.prefix) && bot.commands[message.substr(1).split(" ")[0]]) || message.toLowerCase().startsWith("i'm ") || message.toLowerCase().startsWith("im "))
+      {
+	console.log("command detected.")
+	console.log
+        if((Date.now() - lastCommand) < (1000 * 1.5)) // n seconds
+        {
+	  console.log("commands firing too quick!")
+          lastCommand = Date.now()
+          return
+        }
+        lastCommand = Date.now()
+      }
+    } catch { return }
+
     if(message.startsWith(process.env.prefix)){
       const fullmessage = message.toLowerCase()
       const args = message.substr(1).split(" ")
@@ -60,20 +85,37 @@ function bindEvents(bot){
           bot.commands[args[0]](args, fullmessage, username)
       }
     }
+    if(message.toLowerCase().startsWith("i'm "))
+    {
+//      bot.chat(">Hi, " + message.slice(4) + ", I'm " + bot.username)
+      bot.chat(dadBot(message, 4))
+    }
+    else if(message.toLowerCase().startsWith("im ")) // I'm too lazy to make this one if statement
+    {
+//      bot.chat(">Hi, " + message.slice(3) + ", I'm " + bot.username)
+      bot.chat(dadBot(message, 3))
+    }
   })
 
   // Log errors and kick reasons:
-  bot.on('login', () => console.log("Joined Server Successfully.", formatDate()))
+  bot.on('login', () => {
+
+//    setInterval(() => {
+//      bot.chat("spam")
+//    }, 20000)
+
+    console.log("Joined Server Successfully.", formatDate())
+  });
   bot.on('kicked', function(reason, loggedIn) {
     console.log(reason, formatDate())
     process.exit(1)
-  })
+  });
   bot.on('error', function(err){
     console.log(err, formatDate())
     process.exit(1)
-  })
+  });
 //  bot.on('error', err => console.log("Unable to join server: ", err, formatDate()));
   bot.on('end', function(){
     process.exit(0)
-  })
+  });
 }

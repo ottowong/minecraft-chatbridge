@@ -13,24 +13,45 @@ module.exports.plugin = (bot) => {
         console.log("Logged in as: "+client.user.tag);
     });
 
+
     // when a message is sent to minecraft
-    bot.on('chat', function (username, message) {
+    bot.on('chat', function (username, message, translate, jsonMsg, matches) {
         const channel = client.channels.cache.get(process.env.discordChannel);
 	console.log("<"+username+"> : "+message)
-	try{
+	console.log(jsonMsg)
+	try
+	{
 		var uuid = bot.players[username].uuid
 		var chatEmbed = new Discord.MessageEmbed()
 			.setColor(0xFFFFFF)
 	        	.setAuthor(username, 'https://crafatar.com/avatars/'+uuid )
 	            	.setDescription(message+" ")
-	}catch(error){
+	}
+	catch(error)
+	{
 		var chatEmbed = new Discord.MessageEmbed()
                         .setColor(0x0099FF)                        
 			.setAuthor(username)
                         .setDescription(message+" ")
 	}
-	if (username.toLowerCase() == bot.username.toLowerCase()){
+	if (message.startsWith(">"))
+	{
 		chatEmbed.setColor(0x00FF00)
+	}
+	if (username.toLowerCase() == bot.username.toLowerCase())
+	{
+		chatEmbed.setColor(0x0000FF)
+	}
+	try
+	{
+		if(jsonMsg.extra[0].json) //whisper
+		{
+			chatEmbed.setColor(0xFF33DD)
+			chatEmbed.setDescription(message.substring(message.indexOf(":") + 1 ))
+		}
+	}
+	catch(error)
+	{
 	}
 	channel.send({ embed: chatEmbed });
 	
@@ -65,6 +86,10 @@ module.exports.plugin = (bot) => {
 			} catch {
 
 			}
+		} else {
+			//console.log(sender)
+			//console.log(jsonMsg)
+			console.log()
 		}
 	});
 	bot.on('error', function(err){
@@ -80,6 +105,14 @@ module.exports.plugin = (bot) => {
 		kickedEmbed = new Discord.MessageEmbed()
                 	.setColor(0xFF0000)
                        	.setDescription(reason)
+		channel.send({ embed: kickedEmbed });
+	});
+
+	bot.on('end', function() {
+		const channel = client.channels.cache.get(process.env.discordChannel);
+		kickedEmbed = new Discord.MessageEmbed()
+                	.setColor(0xFF0000)
+                       	.setDescription("end")
 		channel.send({ embed: kickedEmbed });
 	});
 
