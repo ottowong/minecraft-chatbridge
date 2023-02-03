@@ -62,7 +62,7 @@ function bindEvents(bot){
     // check if the message starts with the prefix
 
     try{
-      if((message.startsWith(process.env.prefix) && bot.commands[message.substr(1).split(" ")[0]]) || message.toLowerCase().startsWith("i'm ") || message.toLowerCase().startsWith("im "))
+      if(message.startsWith(process.env.prefix) && bot.commands[message.substr(1).split(" ")[0]])
       {
 	console.log("command detected.")
 	console.log
@@ -85,16 +85,6 @@ function bindEvents(bot){
           bot.commands[args[0]](args, fullmessage, username)
       }
     }
-    if(message.toLowerCase().startsWith("i'm "))
-    {
-//      bot.chat(">Hi, " + message.slice(4) + ", I'm " + bot.username)
-      bot.chat(dadBot(message, 4))
-    }
-    else if(message.toLowerCase().startsWith("im ")) // I'm too lazy to make this one if statement
-    {
-//      bot.chat(">Hi, " + message.slice(3) + ", I'm " + bot.username)
-      bot.chat(dadBot(message, 3))
-    }
   })
 
   // Log errors and kick reasons:
@@ -106,16 +96,19 @@ function bindEvents(bot){
 
     console.log("Joined Server Successfully.", formatDate())
   });
+
   bot.on('kicked', function(reason, loggedIn) {
     console.log(reason, formatDate())
-    process.exit(1)
+    //process.exit(1)
   });
+
   bot.on('error', function(err){
     console.log(err, formatDate())
-    process.exit(1)
+    //process.exit(1)
   });
+
 //  bot.on('error', err => console.log("Unable to join server: ", err, formatDate()));
   bot.on('end', function(){
-    process.exit(0)
+    //process.exit(0)
   });
 }

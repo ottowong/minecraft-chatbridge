@@ -120,9 +120,13 @@ module.exports.command = (bot) => {
         }
     }
 	
-	bot.commands['fortune'] = async function (args) {
+    bot.commands['fortune'] = async function (args) {
         const i = Math.floor(Math.random() * fortunes.length)
         bot.chat('>' + fortunes[i]);
+    }
+
+    bot.commands['seed'] = async function (args) {
+      bot.chat(">7540332306713543803")
     }
 
     bot.commands['flip'] = async function (args, m, username) {

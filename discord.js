@@ -6,6 +6,22 @@ const client = new Discord.Client();
 
 var requestify = require('requestify');
 
+
+['SIGINT', 'SIGTERM', 'SIGQUIT']
+  .forEach(signal => process.on(signal, () => {
+
+    const channel = client.channels.cache.get(process.env.discordChannel);
+    var sigEmbed = new Discord.MessageEmbed()
+	.setColor(0xFF0000)
+	.setDescription(signal)
+    channel.send({ embed: sigEmbed });
+
+    setTimeout(() => { // shit code, wait 1 second before exiting on sigint/term/quit
+      process.exit();
+    }, 1000)
+  }));
+
+
 module.exports.plugin = (bot) => {
     
     // login
@@ -98,6 +114,7 @@ module.exports.plugin = (bot) => {
                         .setColor(0xFF0000)
                         .setDescription(err)
                 channel.send({ embed: errorEmbed });
+		process.exit(1)
     	})
 
 	bot.on('kicked', function(reason, loggedIn) {
@@ -106,6 +123,7 @@ module.exports.plugin = (bot) => {
                 	.setColor(0xFF0000)
                        	.setDescription(reason)
 		channel.send({ embed: kickedEmbed });
+		process.exit(1)
 	});
 
 	bot.on('end', function() {
@@ -114,6 +132,7 @@ module.exports.plugin = (bot) => {
                 	.setColor(0xFF0000)
                        	.setDescription("end")
 		channel.send({ embed: kickedEmbed });
+		process.exit(0)
 	});
 
     // when a message is sent to discord
@@ -126,7 +145,14 @@ module.exports.plugin = (bot) => {
         if(msg.content.startsWith(process.env.prefix)){
             // anon command
             if(msg.content.startsWith(process.env.prefix+"a ")){
-                bot.chat(msg.content.substr(3));
+		if (process.env.admins.includes(msg.author.id))
+		{
+	                bot.chat(msg.content.substr(3));
+		} 
+		else 
+		{ 
+			return 
+		}
             } else if(msg.content.startsWith(process.env.prefix+"w ")) {
                 var msgargs = msg.content.substr(1).split(" ")
                 bot.chat("/w "+ msgargs[1]+msg.content.substr(msgargs[1].length + 3))
