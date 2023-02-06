@@ -7,12 +7,12 @@ let lastCommand = new Date();
 
 console.log("Trying to Join "+process.env.host+":"+process.env.port)
 var options = {
-  host: process.env.host, // optional
-  port: process.env.port,       // optional
-  username: process.env.mcEmail, // email and password are required only for
-  password: process.env.mcPassword,          // online-mode=true servers
-  version: process.env.version,                 // false corresponds to auto version detection (that's the default), put for example "1.8.8" if you need a specific version
-  auth: process.env.auth      // optional; by default uses mojang, if using a microsoft account, set to 'microsoft'
+  host: process.env.host,
+  port: process.env.port,
+  username: process.env.mcEmail,
+  password: process.env.mcPassword,
+  version: process.env.version,
+  auth: process.env.auth
 }
 
 var bot = mineflayer.createBot(options);
@@ -26,20 +26,6 @@ commands["command"](bot)
 // load discord plugin
 const discordPlugin = require("./discord.js")
 discordPlugin["plugin"](bot)
-
-//bot.once("spawn", () => {
-//    mineflayerViewer(bot, { port: 9001, firstperson: true })
-//})
-
-
-//console.log(bot.commands)
-
-function dadBot(message, leng)
-{
-	message = message.toString()
-	message = message.slice(0,150 - (11 + bot.username.length))
-      	return(">Hi, " + message.slice(leng) + ", I'm " + bot.username)
-}
 
 function formatDate()
 {
@@ -107,7 +93,6 @@ function bindEvents(bot){
     //process.exit(1)
   });
 
-//  bot.on('error', err => console.log("Unable to join server: ", err, formatDate()));
   bot.on('end', function(){
     //process.exit(0)
   });
