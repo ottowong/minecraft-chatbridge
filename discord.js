@@ -114,7 +114,9 @@ module.exports.plugin = (bot) => {
                         .setColor(0xFF0000)
                         .setDescription(err)
                 channel.send({ embed: errorEmbed });
-		process.exit(1)
+		setTimeout(() => {
+			process.exit(1)
+		}, 1000)
     	})
 
 	bot.on('kicked', function(reason, loggedIn) {
@@ -123,7 +125,9 @@ module.exports.plugin = (bot) => {
                 	.setColor(0xFF0000)
                        	.setDescription(reason)
 		channel.send({ embed: kickedEmbed });
-		process.exit(1)
+		setTimeout(() => {
+			process.exit(1)
+		}, 1000)
 	});
 
 	bot.on('end', function() {
@@ -132,7 +136,9 @@ module.exports.plugin = (bot) => {
                 	.setColor(0xFF0000)
                        	.setDescription("end")
 		channel.send({ embed: kickedEmbed });
-		process.exit(0)
+		setTimeout(() => {
+			process.exit(0)
+		}, 1000)
 	});
 
     // when a message is sent to discord
