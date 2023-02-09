@@ -29,6 +29,24 @@ module.exports.plugin = (bot) => {
         console.log("Logged in as: "+client.user.tag);
     });
 
+	bot.once('spawn', function () {
+		setInterval(() =>{
+			const channel = client.channels.cache.get("1070429881743196252");
+			var playerList = Object.keys(bot.players)
+			var playersStr = ""
+			playerList.forEach(item => {
+				playersStr += item + "\n"
+			})
+			playersStr = playersStr.replace(/\\(\*|_|`|~|\\)/g, '$1');
+			playersStr = playersStr.replace(/(\*|_|`|~|\\)/g, '\\$1');
+			console.log(playersStr)
+			channel.messages.fetch("1072131825247461457")
+			.then(message => message.edit(playersStr))
+		}, 10000)
+	})
+
+	bot.on('playerJoined', function (player) {
+	})
 
     // when a message is sent to minecraft
     bot.on('chat', function (username, message, translate, jsonMsg, matches) {
