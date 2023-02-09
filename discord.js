@@ -162,7 +162,19 @@ module.exports.plugin = (bot) => {
     // when a message is sent to discord
     client.on("message", msg => {
         // ignore message not in the correct channel
-        if(msg.channel.id !== process.env.discordChannel) return;
+        if(msg.channel.id !== process.env.discordChannel) 
+	{
+        	if(msg.channel.id == process.env.discordAdminChannel) 
+		{
+			bot.chat(msg.content);
+			msg.delete()
+			return;
+		}
+		else
+		{
+			return;
+		}
+	}
         // ignore the bot's own messages
         if(msg.author.id === client.user.id) return;
         // if message starts with the prefix, don't show the username so discord users can use commands
