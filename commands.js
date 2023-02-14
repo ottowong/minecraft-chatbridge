@@ -27,6 +27,7 @@ module.exports.command = (bot) => {
 	}
 
     bot.commands['r'] = async function (args, fullmessage, username) {
+	// should move this to .env
         const maxModifier = 1000
         const maxNumberOfRolls = 10
         const maxNumberOfDice = 10

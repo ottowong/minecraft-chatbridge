@@ -33,13 +33,14 @@ module.exports.plugin = (bot) => {
 		setInterval(() =>{
 			const channel = client.channels.cache.get("1070429881743196252");
 			var playerList = Object.keys(bot.players)
-			var playersStr = ""
+			let currentDate = new Date
+			var playersStr ="**Last Updated: " + currentDate.toDateString() + "**\n"
 			playerList.forEach(item => {
+				item = item.replace(/\\(\*|_|`|~|\\)/g, '$1');
+				item = item.replace(/(\*|_|`|~|\\)/g, '\\$1');
 				playersStr += item + "\n"
 			})
-			playersStr = playersStr.replace(/\\(\*|_|`|~|\\)/g, '$1');
-			playersStr = playersStr.replace(/(\*|_|`|~|\\)/g, '\\$1');
-			console.log(playersStr)
+			//console.log(playersStr)
 			channel.messages.fetch("1072131825247461457")
 			.then(message => message.edit(playersStr))
 		}, 10000)
@@ -93,26 +94,38 @@ module.exports.plugin = (bot) => {
     })
 
 	bot.on('message', function (jsonMsg, position, sender, verified) {
-
+		const channel = client.channels.cache.get(process.env.discordChannel);
 		try{
-			console.log(jsonMsg.extra[0].json)
-			console.log("whisper")
+			if(jsonMsg.extra[0].color == "light_purple"){return} // ignore whisper
+			//console.log(jsonMsg.extra[0].json)
+			//console.log("whisper")
+			//console.log(jsonMsg)
+			var whisperStr = ""
+			for (let i = 0; i < jsonMsg.extra.length; i++)
+			{
+				whisperStr = whisperStr + jsonMsg.extra[i]
+			}
+			console.log(whisperStr)
+
+			whisperEmbed = new Discord.MessageEmbed()
+                                .setColor(0x00989b)
+                                .setDescription(whisperStr)
+                        channel.send({ embed: whisperEmbed })
+			return;
 
 		} catch {
 			
 		}
 
 		//console.log(bot.players.username)
-		const playerList = Object.keys(bot.players)
 
-		const channel = client.channels.cache.get(process.env.discordChannel);
 
 		//console.log(playerList)
 		//console.log(position)
 		//console.log(jsonMsg.text)
 		if(position == "system" && jsonMsg.text){
 			try{
-			console.log(jsonMsg.text)
+			//console.log(jsonMsg.text)
 			systemEmbed = new Discord.MessageEmbed()
 				.setColor(0x838383)
 				.setDescription(jsonMsg.text)
@@ -123,7 +136,7 @@ module.exports.plugin = (bot) => {
 		} else {
 			//console.log(sender)
 			//console.log(jsonMsg)
-			console.log()
+			//console.log()
 		}
 	});
 	bot.on('error', function(err){
@@ -166,8 +179,9 @@ module.exports.plugin = (bot) => {
 	{
         	if(msg.channel.id == process.env.discordAdminChannel) 
 		{
-			bot.chat(msg.content);
-			msg.delete()
+			bot.chat((msg.content).slice(0,239));
+			msg.react("<:verified:1073358388676792390>")
+			//msg.delete()
 			return;
 		}
 		else
@@ -196,8 +210,9 @@ module.exports.plugin = (bot) => {
                 bot.chat(msg.content);
             }
         } else {
-            bot.chat(msg.author.tag+": "+msg.content);
+            bot.chat((msg.author.tag+": "+msg.content).slice(0,239));
+	    return;
         }
-        console.log(msg.author.tag+": "+msg.content);
+        console.log((msg.author.tag+": "+msg.content).slice(0,239));
     });   
 }
