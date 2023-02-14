@@ -4,6 +4,9 @@ const https = require('https');
 const Discord = require("discord.js");
 const client = new Discord.Client();
 
+const fs = require('fs');
+
+
 var requestify = require('requestify');
 
 
@@ -21,6 +24,74 @@ var requestify = require('requestify');
     }, 1000)
   }));
 
+
+
+function formatDate(option = 3)
+{
+	// 3 = all
+	// 2 = yyyy-mm-dd
+	// 1 = hh:mm:ss
+        let current = new Date();
+	let dateTime = ""
+	let cDate = ""
+	let cTime = ""
+
+	let year = current.getFullYear().toString()
+	let month = (current.getMonth() + 1).toString()
+        let day = current.getDate().toString()
+
+	let hour = current.getHours().toString()
+	let minute = current.getMinutes().toString()
+	let second = current.getSeconds().toString()
+
+	if(month.length < 2)
+	{
+		month = "0" + month
+	}
+	if(day.length < 2)
+	{
+		day = "0" + day
+	}
+	if(hour.length < 2)
+	{
+		hour = "0" + hour
+	}
+	if(minute.length < 2)
+	{
+		minute = "0" + minute
+	}
+	if(second.length < 2)
+	{
+		second = "0" + second
+	}
+
+	cDate = year + '-' + month + '-' + day;
+        cTime = hour + ":" + minute + ":" + second;
+        if(option == 2 || option == 3) // date
+	{
+		dateTime += cDate
+	}
+	if(option == 3){dateTime += " "} // add space for both
+	if(option == 1 || option == 3) // time
+	{
+		dateTime += cTime
+	}
+        return(dateTime);
+}
+
+function formatDateYear()
+{
+        let current = new Date();
+        let cDate = current.getFullYear() + '-' + (current.getMonth() + 1) + '-' + current.getDate();
+        return(cDate);
+}
+
+function formatDateTime()
+{
+        let current = new Date();
+        let cTime = current.getHours() + ":" + current.getMinutes() + ":" + current.getSeconds();
+        return(cTime);
+}
 
 module.exports.plugin = (bot) => {
     
@@ -61,9 +132,11 @@ module.exports.plugin = (bot) => {
 			.setColor(0xFFFFFF)
 	        	.setAuthor(username, 'https://crafatar.com/avatars/'+uuid )
 	            	.setDescription(message+" ")
+		fs.writeFile("./log/"+formatDate(2)+".txt", "[" + formatDate(1) + "] " + username + ": " + message + "\n", { flag: "a+" }, err => {});
 	}
 	catch(error)
 	{
+		console.log(error)
 		var chatEmbed = new Discord.MessageEmbed()
                         .setColor(0x0099FF)                        
 			.setAuthor(username)

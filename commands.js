@@ -1,5 +1,5 @@
 var seedrandom = require('seedrandom');
-
+require('dotenv').config()
 
 // hardcode some accounts that try to break the bot lol
 // probably should use the .env for this
@@ -21,8 +21,8 @@ module.exports.command = (bot) => {
  
 	bot.commands['help'] = async function (args, m, username) {
 		const commands = Object.keys(bot.commands)
-		if (m == "!help" && !(blacklist.includes(username.toLowerCase()))){
-	        	bot.chat(`>Commands: !${commands.join(', !')}, "/kill count"`)
+		if (m == process.env.prefix+"help" && !(blacklist.includes(username.toLowerCase()))){
+	        	bot.chat(`>Commands: `+process.env.prefix+`${commands.join(', '+process.env.prefix)}, "/kill count"`)
 		}
 	}
 
@@ -49,7 +49,7 @@ module.exports.command = (bot) => {
             try {
                 let messagestring = fullmessage.substr(3).toLowerCase().replace(/\s/g, '')
                 // !r is shorthand for !r 1d20
-                if (fullmessage == "!r") {
+                if (fullmessage == process.env.prefix+"r") {
                     messagestring = "1d6"
                 }
                 
@@ -200,7 +200,7 @@ module.exports.command = (bot) => {
     }
 
     bot.commands["discord"] = async function(args, m, username) {
-	if (m == "!discord" && !(blacklist.includes(username.toLowerCase())) ){
+	if (m == process.env.predix+"discord" && !(blacklist.includes(username.toLowerCase())) ){
 	        bot.chat(">JOIN THE SADLADS DISCORD: http://discord.sadlads.com") // todo: put this message in the .env
 	}
     }
