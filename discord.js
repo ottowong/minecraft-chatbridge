@@ -24,7 +24,12 @@ var requestify = require('requestify');
     }, 1000)
   }));
 
-
+function cleanMarkdown(text)
+{
+	text = text.replace(/\\(\*|_|`|~|\\)/g, '$1');
+        text = text.replace(/(\*|_|`|~|\\)/g, '\\$1');
+	return text
+}
 
 function formatDate(option = 3)
 {
@@ -79,20 +84,6 @@ function formatDate(option = 3)
         return(dateTime);
 }
 
-function formatDateYear()
-{
-        let current = new Date();
-        let cDate = current.getFullYear() + '-' + (current.getMonth() + 1) + '-' + current.getDate();
-        return(cDate);
-}
-
-function formatDateTime()
-{
-        let current = new Date();
-        let cTime = current.getHours() + ":" + current.getMinutes() + ":" + current.getSeconds();
-        return(cTime);
-}
-
 module.exports.plugin = (bot) => {
     
     // login
@@ -106,14 +97,21 @@ module.exports.plugin = (bot) => {
 			var playerList = Object.keys(bot.players)
 			let currentDate = new Date
 			var playersStr ="**Last Updated: " + currentDate.toDateString() + "**\n"
+			var namesFields = []
 			playerList.forEach(item => {
-				item = item.replace(/\\(\*|_|`|~|\\)/g, '$1');
-				item = item.replace(/(\*|_|`|~|\\)/g, '\\$1');
+				item = cleanMarkdown(item)
 				playersStr += item + "\n"
+				namesFields.push({"name" : item, "value" : "\u200B", "inline": true})
 			})
 			//console.log(playersStr)
+
+			var playersEmbed = new Discord.MessageEmbed()
+				.setColor(0x00989b)
+				.setTitle("Last Updated: " + formatDate())
+				.addFields(namesFields);
+
 			channel.messages.fetch("1072131825247461457")
-			.then(message => message.edit(playersStr))
+			.then(message => message.edit({ embed: playersEmbed}))
 		}, 10000)
 	})
 
@@ -131,18 +129,18 @@ module.exports.plugin = (bot) => {
 		var chatEmbed = new Discord.MessageEmbed()
 			.setColor(0xFFFFFF)
 	        	.setAuthor(username, 'https://crafatar.com/avatars/'+uuid )
-	            	.setDescription(message+" ")
+	            	.setDescription(cleanMarkdown(message))
 		fs.writeFile("./log/"+formatDate(2)+".txt", "[" + formatDate(1) + "] " + username + ": " + message + "\n", { flag: "a+" }, err => {});
 	}
-	catch(error)
+	catch(error) // probably a whisper. This is bad coding :)
 	{
 		console.log(error)
 		var chatEmbed = new Discord.MessageEmbed()
-                        .setColor(0x0099FF)                        
+                        .setColor(0x0099FF)  
 			.setAuthor(username)
-                        .setDescription(message+" ")
+                        .setDescription(message)
 	}
-	if (message.startsWith(">"))
+	if (message.startsWith(">")) // greentext. could probably do something with the 'color' field in json but I'm too lazy.
 	{
 		chatEmbed.setColor(0x00FF00)
 	}
