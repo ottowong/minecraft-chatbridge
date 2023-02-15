@@ -200,7 +200,7 @@ module.exports.command = (bot) => {
     }
 
     bot.commands["discord"] = async function(args, m, username) {
-	if (m == process.env.predix+"discord" && !(blacklist.includes(username.toLowerCase())) ){
+	if (m == process.env.prefix+"discord" && !(blacklist.includes(username.toLowerCase())) ){
 	        bot.chat(">JOIN THE SADLADS DISCORD: http://discord.sadlads.com") // todo: put this message in the .env
 	}
     }

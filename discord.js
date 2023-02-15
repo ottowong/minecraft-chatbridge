@@ -265,9 +265,9 @@ module.exports.plugin = (bot) => {
         // ignore the bot's own messages
         if(msg.author.id === client.user.id) return;
         // if message starts with the prefix, don't show the username so discord users can use commands
-        if(msg.content.startsWith(process.env.prefix)){
+        if(msg.content.startsWith(process.env.discordPrefix)){
             // anon command
-            if(msg.content.startsWith(process.env.prefix+"a ")){
+            if(msg.content.startsWith(process.env.discordPrefix+"a ")){
 		if (process.env.admins.includes(msg.author.id))
 		{
 	                bot.chat(msg.content.substr(3));
@@ -276,7 +276,7 @@ module.exports.plugin = (bot) => {
 		{ 
 			return 
 		}
-            } else if(msg.content.startsWith(process.env.prefix+"w ")) {
+            } else if(msg.content.startsWith(process.env.discordPrefix+"w ")) {
                 var msgargs = msg.content.substr(1).split(" ")
                 bot.chat("/w "+ msgargs[1]+msg.content.substr(msgargs[1].length + 3))
             } else {
