@@ -103,14 +103,17 @@ module.exports.plugin = (bot) => {
 			var namesFields = []
 			playerList.forEach((item ,i , arr) => {
 				item = cleanMarkdown(item)
-				playersStr = playersStr + "**" + item
+				if(i % 2 == 0)
+				{
+					playersStr = playersStr + "**" + item + "**"
+				}
+				else
+				{
+					playersStr += item
+				}
 				if(playerList.length -1 != i)
 				{	
 					playersStr += ", "
-				}
-				else if(playerList.length % 2 != 0)
-				{
-					playersStr += "**"
 				}
 			})
 			console.log(namesFields)
