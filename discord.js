@@ -4,6 +4,8 @@ const https = require('https');
 const Discord = require("discord.js");
 const client = new Discord.Client();
 
+
+
 const fs = require('fs');
 
 
@@ -95,20 +97,31 @@ module.exports.plugin = (bot) => {
 		setInterval(() =>{
 			const channel = client.channels.cache.get("1070429881743196252");
 			var playerList = Object.keys(bot.players)
+			console.log(playerList)
 			let currentDate = new Date
-			var playersStr ="**Last Updated: " + currentDate.toDateString() + "**\n"
+			var playersStr = "**"
 			var namesFields = []
-			playerList.forEach(item => {
+			playerList.forEach((item ,i , arr) => {
 				item = cleanMarkdown(item)
-				playersStr += item + "\n"
-				namesFields.push({"name" : item, "value" : "\u200B", "inline": true})
+				playersStr += item
+				if(playerList.length -1 != i)
+				{
+					playersStr += ", "
+				}
+				
 			})
-			//console.log(playersStr)
+			console.log(namesFields)
 
 			var playersEmbed = new Discord.MessageEmbed()
 				.setColor(0x00989b)
-				.setTitle("Last Updated: " + formatDate())
-				.addFields(namesFields);
+				.setTitle("Player List")
+				.setDescription(playersStr+"**")
+				.addFields(
+					{ name : "Player Count", value : playerList.length },
+					{ name : "TPS", value : bot.getTps() }
+				)
+				.setFooter("Last Updated")
+				.setTimestamp()
 
 			channel.messages.fetch("1072131825247461457")
 			.then(message => message.edit({ embed: playersEmbed}))
@@ -143,6 +156,10 @@ module.exports.plugin = (bot) => {
 	if (message.startsWith(">")) // greentext. could probably do something with the 'color' field in json but I'm too lazy.
 	{
 		chatEmbed.setColor(0x00FF00)
+		if(message.startsWith("> "))
+		{
+			chatEmbed.setDescription("\\" + cleanMarkdown(message))
+		}
 	}
 	if (username.toLowerCase() == bot.username.toLowerCase())
 	{

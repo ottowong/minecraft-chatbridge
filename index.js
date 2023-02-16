@@ -1,6 +1,8 @@
 require('dotenv').config()
 const { utils } = require('aes-js')
 const mineflayer = require('mineflayer')
+var tpsPlugin = require('mineflayer-tps')(mineflayer)
+
 //const mineflayerViewer = require("prismarine-viewer").mineflayer
 
 let lastCommand = new Date();
@@ -16,6 +18,8 @@ var options = {
 }
 
 var bot = mineflayer.createBot(options);
+
+bot.loadPlugin(tpsPlugin)
 
 bindEvents(bot);
 
