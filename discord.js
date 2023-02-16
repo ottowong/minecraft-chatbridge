@@ -99,23 +99,26 @@ module.exports.plugin = (bot) => {
 			var playerList = Object.keys(bot.players)
 			console.log(playerList)
 			let currentDate = new Date
-			var playersStr = "**"
+			var playersStr = ""
 			var namesFields = []
 			playerList.forEach((item ,i , arr) => {
 				item = cleanMarkdown(item)
-				playersStr += item
+				playersStr = playersStr + "**" + item
 				if(playerList.length -1 != i)
-				{
+				{	
 					playersStr += ", "
 				}
-				
+				else if(playerList.length % 2 != 0)
+				{
+					playersStr += "**"
+				}
 			})
 			console.log(namesFields)
 
 			var playersEmbed = new Discord.MessageEmbed()
 				.setColor(0x00989b)
 				.setTitle("Player List")
-				.setDescription(playersStr+"**")
+				.setDescription(playersStr)
 				.addFields(
 					{ name : "Player Count", value : playerList.length },
 					{ name : "TPS", value : bot.getTps() }
